@@ -1,0 +1,114 @@
+name: more_devs_do_zero
+description: "A new Flutter project."
+
+
+publish_to: 'none' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+
+
+
+
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  
+  
+  cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.4.8
+  animated_snack_bar: ^0.4.0
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "assets/images/icone.png"
+  color_dark: "#FFFFFF"
+  android_12:
+    # background color
+    color: "#42a5f5"
+    # color_dark: "#042a49"
+
+    # center-logo
+    # If this parameter is not specified, the app's launcher icon will be used instead. 
+    # Please note that the splash screen will be clipped to a circle on the center of the screen. 
+    # with background: 960×960 px (fit within circle 640px in diameter)    
+    # without background: 1152×1152 px (fit within circle 768px in diameter)
+    # ensure that the most important design elements of your image are placed within a circular area 
+    image: assets/images/Icone.png    
+    # image_dark: assets/images/logo/logo-splash2.png  
+
+    # center-logo background color
+    icon_background_color: "#111111"
+    # icon_background_color_dark: "#eeeeee"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  
+  
+  
+  
+  
+  flutter_lints: ^6.0.0
+
+
+
+
+
+flutter:
+
+  
+  
+  
+  uses-material-design: true
+
+  assets:
+    - assets/images/icone.png
+  
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

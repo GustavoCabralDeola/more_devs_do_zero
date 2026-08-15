@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/shared/app_colors.dart';
+
+class AppTextField extends StatefulWidget {
+  const AppTextField({
+    super.key,
+    required this.hintText,
+    this.obscureText = false,
+    this.onChanged,
+    this.errorText,
+  });
+  final String hintText;
+  final bool obscureText;
+  final Function(String)? onChanged;
+  final String? errorText;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  late bool isObscure;
+  @override
+  void initState() {
+    isObscure = widget.obscureText;
+    super.initState();
+  }
+
+  void toggleObscure() {
+    setState(() {
+      isObscure = !isObscure!;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: widget.onChanged,
+      obscureText: isObscure,
+      decoration: InputDecoration(
+        errorText: widget.errorText,
+        hintText: widget.hintText,
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: isObscure
+                    ? Icon(Icons.visibility_off)
+                    : Icon(Icons.visibility),
+                onPressed: () {
+                  toggleObscure();
+                },
+              )
+            : null,
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.grey100),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.grey100),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.grey100),
+        ),
+      ),
+    );
+  }
+}
