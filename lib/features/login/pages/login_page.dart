@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:more_devs_do_zero/features/login/controllers/login_controller.dart';
 import 'package:more_devs_do_zero/features/login/pages/cadastro_page.dart';
@@ -23,6 +25,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   initState() {
     super.initState();
+  }
+
+  Future<void> login() async {
+    setState(() {
+      loginController.isLoading = true;
+    });
+
+    await loginController.login();
+
+    setState(() {
+      loginController.isLoading = false;
+    });
   }
 
   @override
@@ -106,11 +120,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   AppElevatedButton(
+                    isLoading: loginController.isLoading,
                     labelStyle: AppTextStyle.buttonLabel,
                     label: 'Entrar',
                     onPressed: loginController.isActiveButton
                         ? () {
-                            print('cliquei em entrar');
+                            login();
                           }
                         : null,
                     type: ButtonType.filled,

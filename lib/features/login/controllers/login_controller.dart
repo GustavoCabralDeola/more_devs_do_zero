@@ -10,6 +10,7 @@ class LoginController {
 
   bool lembrarMe = false;
   bool isActiveButton = false;
+  bool isLoading = false;
   bool isActiveCheckBox = false;
 
   bool get isEmailValid => _emailRegex.hasMatch(email.trim());
@@ -58,5 +59,10 @@ class LoginController {
 
   void changeActiveCheckBox(bool value) {
     isActiveCheckBox = value;
+  }
+
+  Future<void> login() async {
+    //Simula o delay de uma chamada de API
+    await Future.delayed(Duration(seconds: 2));
   }
 }
