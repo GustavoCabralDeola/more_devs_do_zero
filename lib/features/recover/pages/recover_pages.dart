@@ -17,6 +17,20 @@ class RecoverPage extends StatefulWidget {
 class _RecoverPageState extends State<RecoverPage> {
   RecoverController recoverController = RecoverController();
 
+  Future<void> _handleContinueButton() async {
+    //futuramente não será necessário o setState, pois a tela
+    // sera reconstruida com o provider
+    setState(() {
+      recoverController.isLoading = true;
+    });
+
+    await recoverController.loadingButton();
+
+    setState(() {
+      recoverController.isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +47,7 @@ class _RecoverPageState extends State<RecoverPage> {
               child: Column(
                 children: [
                   Text('Recuperar senha', style: AppTextStyle.tittle),
+                  SizedBox(height: 20),
                   AppTextField(
                     hintText: 'email@dominio.com',
                     onChanged: (value) {
@@ -41,11 +56,16 @@ class _RecoverPageState extends State<RecoverPage> {
                       });
                     },
                   ),
-                  Spacer(),
+                  SizedBox(height: 300),
                   AppElevatedButton(
+                    isLoading: recoverController.isLoading,
                     label: 'Continuar',
                     type: ButtonType.filled,
-                    onPressed: recoverController.isActiveButton ? () {} : null,
+                    onPressed: recoverController.isActiveButton
+                        ? () {
+                            _handleContinueButton();
+                          }
+                        : null,
                   ),
                 ],
               ),

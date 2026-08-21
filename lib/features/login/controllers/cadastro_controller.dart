@@ -1,81 +1,82 @@
+import 'package:flutter/material.dart';
+
 class CadastroController {
-  String email = '';
-  String nome = '';
   String senha = '';
   String confirmarSenha = '';
   bool isActiveButton = false;
   bool isActiveCheckBox = false;
+  bool isLoading = false;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
 
   final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   final RegExp _regexSenha = RegExp(
     r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$',
   );
 
-  bool get isEmailValid => _emailRegex.hasMatch(email.trim());
+  bool get senhaMinimo6 => senha.length >= 6 ? true : false;
+  bool get senhaMaiscula => senha.contains(RegExp(r'(?=.*[A-Z])'));
+  bool get senhaMinusculo => senha.contains(RegExp(r'(?=.*[a-z])'));
+  //bool get senhaCaractereEspecial => senha.contains(RegExp(r'^[A-Za-z0-9]+$'));
+
   bool get isSenhaSpecialCharacterValid => _regexSenha.hasMatch(senha.trim());
   bool get isSenhaLengthValid => senha.trim().length >= 6;
 
-  String? get emailError {
-    if (email.trim().isEmpty) {
+  bool checkBoxError = false;
+  //=============== VALIDATORS ===============
+
+  String? validEmail(String? value) {
+    if (_emailRegex.hasMatch(value!) || value.isEmpty) {
       return null;
     }
-
-    if (!_emailRegex.hasMatch(email.trim())) {
-      return 'Email inválido';
-    }
+    return 'E-mail inválido';
   }
 
-  String? get senhaError {
-    if (senha.trim().isEmpty) {
+  String? validPassword(String? value) {
+    if (isSenhaLengthValid && isSenhaSpecialCharacterValid || value == null) {
       return null;
     } else if (!isSenhaLengthValid) {
-      return 'Senha deve ter no mínimo 6 caractéres';
+      return 'Senha deve conter no mínimo 6 caractéres';
     } else if (!isSenhaSpecialCharacterValid) {
-      return 'Senha deve conter pelo menos uma letra maiúscula \n e um caractere especial';
+      return 'Senha deve conter pelo menos 1 caractére especial';
+    } else if (!senhaMaiscula && !senhaMinusculo) {
+      return 'Senha deve conter pelo menos um caractére maiusculo e um minusculo';
     }
+    return 'Senha inválida';
   }
 
-  String? get confirmarSenhaError {
-    if (confirmarSenha.trim().isEmpty) {
+  String? validConfirmPassWord(String? value) {
+    if (value == senha) {
       return null;
-    } else if (senha != confirmarSenha) {
-      return 'As senhas não coincidem';
     }
+
+    return 'As senhas não são iguais';
   }
 
-  void validFields() {
-    isActiveButton =
-        email.trim().isNotEmpty &&
-        nome.trim().isNotEmpty &&
-        senha.trim().isNotEmpty &&
-        confirmarSenha.trim().isNotEmpty &&
-        isActiveCheckBox;
-
-    print(isActiveButton);
+  bool validateCheckBox() {
+    checkBoxError = !isActiveCheckBox;
+    return isActiveCheckBox;
   }
 
+  //================= SETS ======================
   void setSenha(String value) {
     senha = value;
-    validFields();
   }
 
   void setConfirmarSenha(String value) {
     confirmarSenha = value;
-    validFields();
-  }
-
-  void setEmail(String value) {
-    email = value;
-    validFields();
-  }
-
-  void setNome(String value) {
-    nome = value;
-    validFields();
   }
 
   void changeActiveCheckBox(bool value) {
     isActiveCheckBox = !isActiveCheckBox;
-    validFields();
+    if (isActiveCheckBox) {
+      checkBoxError = false;
+    }
+  }
+
+  Future<void> loadingButton() async {
+    //Simula o delay de uma chamada de API
+    await Future.delayed(Duration(seconds: 2));
   }
 }

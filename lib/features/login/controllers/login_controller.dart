@@ -1,64 +1,85 @@
 import 'dart:math';
 
-class LoginController {
+import 'package:flutter/material.dart';
+
+class LoginController extends ChangeNotifier {
   final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   final RegExp _regexSenha = RegExp(
     r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$',
   );
-  String email = '';
-  String senha = '';
+  // String email = '';
+  // String senha = '';
 
-  bool lembrarMe = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   bool isActiveButton = false;
   bool isLoading = false;
+  bool lembrarMe = false;
   bool isActiveCheckBox = false;
 
-  bool get isEmailValid => _emailRegex.hasMatch(email.trim());
-  bool get isSenhaSpecialCharacterValid => _regexSenha.hasMatch(senha.trim());
-  bool get isSenhaLengthValid => senha.trim().length >= 6;
+  bool get isEmailValid => _emailRegex.hasMatch(emailController.text.trim());
+  bool get isSenhaSpecialCharacterValid =>
+      _regexSenha.hasMatch(senhaController.text.trim());
+  bool get isSenhaLengthValid => senhaController.text.trim().length >= 6;
 
-  String? get emailError {
-    if (email.trim().isEmpty) {
-      return null;
-    }
+  Future<void> handlelogin() async {
+    //futuramente não será necessário o setState, pois a tela
+    // sera reconstruida com o provider
+    if (formkey.currentState!.validate()) {
+      isLoading = true;
+      notifyListeners();
 
-    if (!_emailRegex.hasMatch(email.trim())) {
-      return 'Email inválido';
+      await login();
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  String? get senhaError {
-    if (senha.trim().isEmpty) {
+  //=============== VALIDATORS ===============
+  void validFields() {
+    isActiveButton =
+        emailController.text.trim().isNotEmpty &&
+        senhaController.text.trim().isNotEmpty;
+  }
+
+  String? validEmail(String? value) {
+    if (_emailRegex.hasMatch(emailController.text)) {
+      return null;
+    }
+    return 'E-mail inválido';
+  }
+
+  String? validPassword(String? value) {
+    if (isSenhaLengthValid && isSenhaSpecialCharacterValid) {
       return null;
     } else if (!isSenhaLengthValid) {
-      return 'Senha deve ter no mínimo 6 caractéres';
+      return 'Senha deve conter no mínimo 6 caractéres';
     } else if (!isSenhaSpecialCharacterValid) {
-      return 'Senha deve conter pelo menos uma letra maiúscula \n e um caractere especial';
+      return 'Senha deve conter pelo menos 1 caractére especial';
     }
+    return 'Senha inválida';
   }
 
-  void validFields() {
-    isActiveButton = email.trim().isNotEmpty && senha.trim().isNotEmpty;
-  }
-
-  void validEmail(String email) {}
-
+  //================= SETS ======================
   void setSenha(String value) {
-    senha = value;
+    senhaController.text = value;
     validFields();
   }
 
   void setEmail(String value) {
-    email = value;
+    emailController.text = value;
     validFields();
   }
 
-  void changeActiveButton() {
-    validFields();
-  }
+  // void changeActiveButton() {
+  //   validFields();
+  // }
 
   void changeActiveCheckBox(bool value) {
-    isActiveCheckBox = value;
+    isActiveCheckBox = !isActiveCheckBox;
+    notifyListeners();
   }
 
   Future<void> login() async {

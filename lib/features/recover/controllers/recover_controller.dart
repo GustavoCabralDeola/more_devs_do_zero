@@ -3,6 +3,7 @@ class RecoverController {
   String email = '';
   bool isActiveButton = false;
   bool get isEmailValid => _emailRegex.hasMatch(email.trim());
+  bool isLoading = false;
 
   String? get emailError {
     if (email.trim().isEmpty || isEmailValid) return null;
@@ -17,5 +18,10 @@ class RecoverController {
 
   void changeActiveButton() {
     isActiveButton = isEmailValid;
+  }
+
+  Future<void> loadingButton() async {
+    //Simula o delay de uma chamada de API
+    await Future.delayed(Duration(seconds: 2));
   }
 }

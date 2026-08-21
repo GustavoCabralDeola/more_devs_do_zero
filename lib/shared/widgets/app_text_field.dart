@@ -3,16 +3,18 @@ import 'package:more_devs_do_zero/shared/app_colors.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
+    this.controller,
     super.key,
     required this.hintText,
     this.obscureText = false,
     this.onChanged,
-    this.errorText,
+    this.validator,
   });
   final String hintText;
   final bool obscureText;
   final Function(String)? onChanged;
-  final String? errorText;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -34,11 +36,14 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controller,
+      //autovalidateMode - controle a maneira que o campo é validado, nesse caso, quando o campo perde o foco
+      autovalidateMode: AutovalidateMode.onUnfocus,
       onChanged: widget.onChanged,
       obscureText: isObscure,
+      validator: widget.validator,
       decoration: InputDecoration(
-        errorText: widget.errorText,
         hintText: widget.hintText,
         suffixIcon: widget.obscureText
             ? IconButton(
