@@ -12,7 +12,7 @@ class LoginController extends ChangeNotifier {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
-  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool isActiveButton = false;
   bool isLoading = false;
@@ -27,7 +27,7 @@ class LoginController extends ChangeNotifier {
   Future<void> handlelogin() async {
     //futuramente não será necessário o setState, pois a tela
     // sera reconstruida com o provider
-    if (formkey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       isLoading = true;
       notifyListeners();
 
