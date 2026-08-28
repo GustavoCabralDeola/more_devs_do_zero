@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/features/home/pages/home_page.dart';
 import 'package:more_devs_do_zero/features/login/controllers/login_controller.dart';
 import 'package:more_devs_do_zero/features/login/pages/cadastro_page.dart';
 import 'package:more_devs_do_zero/features/recover/pages/recover_pages.dart';
 import 'package:more_devs_do_zero/shared/app_colors.dart';
 import 'package:more_devs_do_zero/shared/app_text_style.dart';
+import 'package:more_devs_do_zero/shared/exceptions/auth_exception.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_check_box.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_elevated_button.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_text_field.dart';
@@ -55,11 +58,6 @@ class LoginPage extends StatelessWidget {
                             return controller.validEmail(value);
                           },
                           hintText: 'email@dominio.com',
-                          // onChanged: (value) {
-                          //   setState(() {
-                          //     loginController.setEmail(value);
-                          //   });
-                          // },
                         ),
 
                         const SizedBox(height: 10),
@@ -71,11 +69,6 @@ class LoginPage extends StatelessWidget {
                           },
                           hintText: '****************',
                           obscureText: true,
-                          // onChanged: (value) {
-                          //   setState(() {
-                          //     loginController.setSenha(value);
-                          //   });
-                          // },
                         ),
 
                         Row(
@@ -110,11 +103,22 @@ class LoginPage extends StatelessWidget {
                           isLoading: controller.isLoading,
                           labelStyle: AppTextStyle.buttonLabel,
                           label: 'Entrar',
-                          onPressed: controller.isActiveButton
-                              ? () {
-                                  controller.handlelogin();
-                                }
-                              : null,
+                          onPressed: () async {
+                            try {
+                              await controller.handleLogin();
+                              Navigator.popAndPushNamed(
+                                context,
+                                HomePage.route,
+                              );
+                            } on AuthException catch (e) {
+                              AnimatedSnackBar.material(
+                                e.message,
+                                type: AnimatedSnackBarType.error,
+                                mobileSnackBarPosition:
+                                    MobileSnackBarPosition.bottom,
+                              ).show(context);
+                            }
+                          },
                           type: ButtonType.filled,
                         ),
 

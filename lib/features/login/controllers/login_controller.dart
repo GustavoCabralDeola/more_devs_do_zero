@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/models/user.dart';
+import 'package:more_devs_do_zero/shared/exceptions/auth_exception.dart';
 
 class LoginController extends ChangeNotifier {
   final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -9,6 +11,8 @@ class LoginController extends ChangeNotifier {
   );
   // String email = '';
   // String senha = '';
+
+  User? user;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
@@ -24,17 +28,27 @@ class LoginController extends ChangeNotifier {
       _regexSenha.hasMatch(senhaController.text.trim());
   bool get isSenhaLengthValid => senhaController.text.trim().length >= 6;
 
-  Future<void> handlelogin() async {
+  changeIsLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
+
+  Future<void> handleLogin() async {
     //futuramente não será necessário o setState, pois a tela
     // sera reconstruida com o provider
-    if (formKey.currentState!.validate()) {
-      isLoading = true;
-      notifyListeners();
-
-      await login();
-      isLoading = false;
-      notifyListeners();
+    if (!formKey.currentState!.validate()) {
+      throw ErrorDescription('validacao_incorreta');
     }
+
+    changeIsLoading(true);
+    try {
+      await login();
+      emailController.clear();
+      senhaController.clear();
+    } finally {
+      changeIsLoading(false);
+    }
+    return;
   }
 
   //=============== VALIDATORS ===============
@@ -85,5 +99,10 @@ class LoginController extends ChangeNotifier {
   Future<void> login() async {
     //Simula o delay de uma chamada de API
     await Future.delayed(Duration(seconds: 2));
+    if (emailController.text.trim() != 'gustavodeola@gmail.com' ||
+        senhaController.text.trim() != '@Aero1224') {
+      throw AuthException('E-mail ou senha inválidos');
+    }
+    user = User(nome: 'Gustavo', email: emailController.text);
   }
 }
