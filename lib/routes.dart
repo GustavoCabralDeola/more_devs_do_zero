@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:more_devs_do_zero/features/home/category_product/pages/categoryProducts_page.dart';
 import 'package:more_devs_do_zero/features/home/pages/home_page.dart';
 import 'package:more_devs_do_zero/features/login/pages/cadastro_page.dart';
 import 'package:more_devs_do_zero/features/login/pages/login_page.dart';

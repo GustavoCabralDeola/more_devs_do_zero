@@ -60,4 +60,15 @@ class HomeController extends ChangeNotifier {
       print(productsViewState);
     }
   }
+
+  // Future<void> getProductsByName() async {
+  //   changeProductsState(ProductsViewState.loading);
+  //   await Future.delayed(Duration(seconds: 3));
+
+  //   try {
+  //     listProducts = mockJson.productsJson.map((item){
+  //       return Product.fromJson(item).name;
+  //     }).first();
+  //   }
+  // }
 }

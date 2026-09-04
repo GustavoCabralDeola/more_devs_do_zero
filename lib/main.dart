@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/features/home/category_product/controllers/categoryProducts_controller.dart';
 import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
 import 'package:more_devs_do_zero/features/login/controllers/cadastro_controller.dart';
 import 'package:more_devs_do_zero/features/login/controllers/login_controller.dart';
@@ -22,7 +23,11 @@ class MyApp extends StatelessWidget {
             return HomeController();
           },
         ),
-
+        ChangeNotifierProvider(
+          create: (context) {
+            return CategoryProductsController();
+          },
+        ),
         ChangeNotifierProvider(
           create: (context) {
             return LoginController();
