@@ -10,20 +10,32 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
-          SizedBox(
-            height: 148,
-            width: 148,
-            child: Skeleton.replace(child: Image.network(product.imageUrl)),
+          Skeleton.replace(
+            replacement: Bone(height: 150, width: 150),
+            child: Container(
+              height: 150,
+
+              width: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage(product.imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
           Text(
-            product.name,
+            product.brand,
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
-          Text(product.brand, style: const TextStyle(fontSize: 16)),
+          Text(product.name, style: const TextStyle(fontSize: 16)),
           Text('\$${product.price}', style: TextStyle(color: AppColors.green)),
         ],
       ),

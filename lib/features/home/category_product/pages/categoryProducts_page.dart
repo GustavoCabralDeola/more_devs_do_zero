@@ -45,33 +45,33 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
         builder: (context, controller, child) {
           return Column(
             children: [
-              AppTextField(
-                hintText: 'Buscar Produtos',
-                onChanged: (value) {
-                  controller.searchProducts(value);
-                },
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16, left: 26, right: 26),
+                child: AppTextField(
+                  hintText: 'Buscar Produtos',
+                  onChanged: (value) {
+                    controller.searchProducts(value);
+                  },
+                ),
               ),
-              Padding(padding: const EdgeInsets.all(8.0)),
+
               Expanded(
                 child: Skeletonizer(
                   enabled:
                       controller.productsViewState == ProductsViewState.loading,
-                  child: Center(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(10),
-                      itemCount: controller.listProducts.length,
+                  child: GridView.builder(
+                    // padding: const EdgeInsets.all(10),
+                    itemCount: controller.listProducts.length,
 
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent:
-                            MediaQuery.of(context).size.width / 2,
-                        mainAxisExtent: 265,
-                        crossAxisSpacing: 0,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = controller.listProducts[index];
-                        return ProductCard(product: product);
-                      },
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
+                      mainAxisExtent: 265,
+                      crossAxisSpacing: 0,
                     ),
+                    itemBuilder: (context, index) {
+                      final product = controller.listProducts[index];
+                      return Center(child: ProductCard(product: product));
+                    },
                   ),
                 ),
               ),

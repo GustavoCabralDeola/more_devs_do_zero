@@ -39,6 +39,9 @@ class CategoryProductsController extends HomeController {
           )
           .toList();
 
+      print(
+        'Nome encontrado? ${listProducts.any((p) => p.name.toLowerCase().contains(name.toLowerCase()) && p.category == category)}',
+      );
       changeProductsState(ProductsViewState.sucess);
     } catch (e) {
       changeProductsState(ProductsViewState.error);
