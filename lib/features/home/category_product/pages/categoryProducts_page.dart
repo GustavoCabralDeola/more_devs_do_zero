@@ -5,6 +5,9 @@ import 'package:more_devs_do_zero/features/home/widgets/product_card.dart';
 import 'package:more_devs_do_zero/models/category.dart';
 import 'package:more_devs_do_zero/models/product.dart';
 import 'package:more_devs_do_zero/shared/app_text_style.dart';
+import 'package:more_devs_do_zero/shared/widgets/app_check_box.dart';
+import 'package:more_devs_do_zero/shared/widgets/app_elevated_button.dart';
+import 'package:more_devs_do_zero/shared/widgets/app_filter_dialog.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -52,6 +55,67 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                   onChanged: (value) {
                     controller.searchProducts(value);
                   },
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      AppFilterDialog.show(
+                        context: context,
+                        child: StatefulBuilder(
+                          builder:
+                              (
+                                BuildContext context,
+                                StateSetter setStateDialog,
+                              ) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Filtrar por:',
+                                        style: AppTextStyle.tittle,
+                                      ),
+
+                                      Row(
+                                        children: [
+                                          Text('Brand'),
+
+                                          Spacer(),
+
+                                          AppCheckBox(
+                                            value: controller.isActiveCheckBox,
+                                            onChanged: (value) {
+                                              controller.changeActiveCheckBox(
+                                                value!,
+                                              );
+                                              setStateDialog(() {});
+                                            },
+                                          ),
+
+                                          SizedBox(height: 24),
+                                        ],
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: SizedBox(
+                                          width: 100,
+                                          child: AppElevatedButton(
+                                            label: 'Ok',
+                                            type: ButtonType.filled,
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.filter_list),
+                  ),
                 ),
               ),
 

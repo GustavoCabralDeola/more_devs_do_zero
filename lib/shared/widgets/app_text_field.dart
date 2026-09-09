@@ -9,12 +9,14 @@ class AppTextField extends StatefulWidget {
     this.obscureText = false,
     this.onChanged,
     this.validator,
+    this.suffixIcon,
   });
   final String hintText;
   final bool obscureText;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final Widget? suffixIcon;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -54,7 +56,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   toggleObscure();
                 },
               )
-            : null,
+            : widget.suffixIcon,
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
