@@ -41,7 +41,8 @@ class CategoryProductsController extends HomeController {
             final searchLower = searchTerm.toLowerCase();
 
             if (isActiveCheckBox) {
-              return product.brand.toLowerCase().contains(searchLower);
+              return product.brand.toLowerCase().contains(searchLower) ||
+                  product.name.toLowerCase().contains(searchLower);
             } else {
               return product.name.toLowerCase().contains(searchLower);
             }
@@ -49,7 +50,11 @@ class CategoryProductsController extends HomeController {
           .toList();
 
       print(
-        'Nome encontrado? ${listProducts.any((p) => p.name.toLowerCase().contains(name.toLowerCase()) && p.category == category)}',
+        'Nome encontrado? ${listProducts.any((p) => p.name.toLowerCase().contains(searchTerm.toLowerCase()) && p.category == category)}',
+      );
+
+      print(
+        'Marca do produto encontrado? ${listProducts.any((p) => p.brand.toLowerCase().contains(searchTerm.toLowerCase()) && p.category == category)}',
       );
       changeProductsState(ProductsViewState.sucess);
     } catch (e) {
