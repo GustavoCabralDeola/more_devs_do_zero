@@ -8,6 +8,18 @@ class AppTextStyle {
     fontWeight: FontWeight.bold,
   );
 
+  static const TextStyle subtitle = TextStyle(
+    color: AppColors.black,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle price = TextStyle(
+    color: AppColors.green,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
   static const TextStyle buttonLabel = TextStyle(
     color: AppColors.white,
     fontWeight: FontWeight.bold,

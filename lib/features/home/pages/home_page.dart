@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [Icon(Icons.shopping_cart_outlined)],
         title: Consumer<LoginController>(
           builder: (context, loginController, child) {
             return Text(
