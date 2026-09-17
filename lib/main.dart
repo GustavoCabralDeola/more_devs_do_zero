@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:more_devs_do_zero/features/home/category_product/controllers/categoryProducts_controller.dart';
+import 'package:more_devs_do_zero/features/home/category_product/controllers/category_products_controller.dart';
 import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
+import 'package:more_devs_do_zero/features/home/product_cart/controllers/product_cart_controller.dart';
 import 'package:more_devs_do_zero/features/login/controllers/cadastro_controller.dart';
 import 'package:more_devs_do_zero/features/login/controllers/login_controller.dart';
 import 'package:more_devs_do_zero/features/login/pages/login_page.dart';
@@ -21,6 +22,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) {
             return HomeController();
+          },
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) {
+            return ProductCartController();
           },
         ),
         ChangeNotifierProvider(

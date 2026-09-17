@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:more_devs_do_zero/features/home/category_product/pages/categoryProducts_page.dart';
 import 'package:more_devs_do_zero/features/home/pages/home_page.dart';
+import 'package:more_devs_do_zero/features/home/product_cart/pages/product_cart_page.dart';
 import 'package:more_devs_do_zero/features/login/pages/cadastro_page.dart';
 import 'package:more_devs_do_zero/features/login/pages/login_page.dart';
 import 'package:more_devs_do_zero/features/recover/pages/recover_pages.dart';
@@ -11,5 +11,6 @@ class AppRoutes {
     CadastroPage.route: (context) => CadastroPage(),
     RecoverPage.route: (context) => RecoverPage(),
     HomePage.route: (context) => const HomePage(),
+    ProductCartPage.route: (context) => ProductCartPage(),
   };
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:more_devs_do_zero/features/home/category_product/controllers/categoryProducts_controller.dart';
+import 'package:more_devs_do_zero/features/home/category_product/controllers/category_products_controller.dart';
 import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
+import 'package:more_devs_do_zero/features/home/product_cart/controllers/product_cart_controller.dart';
 import 'package:more_devs_do_zero/features/home/widgets/product_card.dart';
 import 'package:more_devs_do_zero/models/category.dart';
 import 'package:more_devs_do_zero/models/product.dart';
@@ -43,7 +44,41 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
       appBar: AppBar(
         title: Text(widget.category.name, style: AppTextStyle.tittle),
         centerTitle: true,
-        actions: [Icon(Icons.shopping_cart_outlined)],
+        actions: [
+          Consumer<ProductCartController>(
+            builder: (context, productCartController, child) {
+              return Stack(
+                children: [
+                  const IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.shopping_cart_outlined),
+                  ),
+                  Positioned(
+                    right: 5,
+                    top: 2,
+                    child: Visibility(
+                      visible: productCartController.totalQuantity > 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          productCartController.totalQuantity.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
 
       body: Consumer<CategoryProductsController>(
@@ -89,7 +124,7 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                                               controller.changeActiveCheckBox(
                                                 value!,
                                               );
-                                              setStateDialog(() {});
+                                              //setStateDialog(() {});
                                             },
                                           ),
 
@@ -160,53 +195,69 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return AppBottomSheet(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    product.imageUrl,
-                    width: double.infinity,
-                    height: 195,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              Text(product.name, style: AppTextStyle.tittle),
-
-              Text(product.brand, style: TextStyle(color: AppColors.grey300)),
-
-              if (product.description != null)
-                Text('Descrição: ${product.description}'),
-
-              const SizedBox(height: 10),
-
-              Text.rich(
-                TextSpan(
-                  text: 'Preço: ',
-                  style: AppTextStyle.subtitle,
-                  children: [
-                    TextSpan(
-                      text: 'R\$ ${product.price.toStringAsFixed(2)}',
-                      style: AppTextStyle.price,
+        return Consumer<ProductCartController>(
+          builder: (context, controller, child) {
+            return AppBottomSheet(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        product.imageUrl,
+                        width: double.infinity,
+                        height: 195,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-              const SizedBox(height: 40),
+                  Text(product.name, style: AppTextStyle.tittle),
 
-              AppElevatedButton(
-                label: 'Adicionar ao Carrinho',
-                type: ButtonType.filled,
-                onPressed: () {},
+                  Text(
+                    product.brand,
+                    style: TextStyle(color: AppColors.grey300),
+                  ),
+
+                  if (product.description != null)
+                    Text('Descrição: ${product.description}'),
+
+                  const SizedBox(height: 10),
+
+                  Text.rich(
+                    TextSpan(
+                      text: 'Preço: ',
+                      style: AppTextStyle.subtitle,
+                      children: [
+                        TextSpan(
+                          text: 'R\$ ${product.price.toStringAsFixed(2)}',
+                          style: AppTextStyle.price,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  AppElevatedButton(
+                    label: 'Adicionar ao Carrinho',
+                    type: ButtonType.filled,
+                    isLoading: controller.isLoading,
+                    onPressed: controller.isLoading
+                        ? null
+                        : () async {
+                            await controller.addProductToCart(product);
+
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
+import 'package:more_devs_do_zero/features/home/product_cart/controllers/product_cart_controller.dart';
 import 'package:more_devs_do_zero/features/home/widgets/product_card.dart';
 import 'package:more_devs_do_zero/models/product.dart';
 import 'package:more_devs_do_zero/shared/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:more_devs_do_zero/shared/app_text_style.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_bottom_sheet.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_elevated_button.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_loading_animation.dart';
+import 'package:provider/provider.dart';
 
 class ProductsSection extends StatelessWidget {
   final ProductsViewState productViewState;
@@ -53,53 +55,105 @@ class ProductsSection extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return AppBottomSheet(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    product.imageUrl,
-                    width: double.infinity,
-                    height: 195,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              Text(product.name, style: AppTextStyle.tittle),
-
-              Text(product.brand, style: TextStyle(color: AppColors.grey300)),
-
-              if (product.description != null)
-                Text('Descrição: ${product.description}'),
-
-              const SizedBox(height: 10),
-
-              Text.rich(
-                TextSpan(
-                  text: 'Preço: ',
-                  style: AppTextStyle.subtitle,
-                  children: [
-                    TextSpan(
-                      text: 'R\$ ${product.price.toStringAsFixed(2)}',
-                      style: AppTextStyle.price,
+        return Consumer<ProductCartController>(
+          builder: (context, controller, child) {
+            final quantity = controller.getProductQuantity(product);
+            return AppBottomSheet(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        product.imageUrl,
+                        width: double.infinity,
+                        height: 195,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-              const SizedBox(height: 40),
+                  Text(product.name, style: AppTextStyle.tittle),
 
-              AppElevatedButton(
-                label: 'Adicionar ao Carrinho',
-                type: ButtonType.filled,
-                onPressed: () {},
+                  Text(
+                    product.brand,
+                    style: TextStyle(color: AppColors.grey300),
+                  ),
+
+                  if (product.description != null)
+                    Text('Descrição: ${product.description}'),
+
+                  const SizedBox(height: 10),
+
+                  Text.rich(
+                    TextSpan(
+                      text: 'Preço: ',
+                      style: AppTextStyle.subtitle,
+                      children: [
+                        TextSpan(
+                          text: 'R\$ ${product.price.toStringAsFixed(2)}',
+                          style: AppTextStyle.price,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+                  if (quantity == 0)
+                    AppElevatedButton(
+                      label: 'Adicionar ao Carrinho',
+                      type: ButtonType.filled,
+                      isLoading: controller.isLoading,
+                      onPressed: controller.isLoading
+                          ? null
+                          : () async {
+                              await controller.addProductToCart(product);
+
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                    )
+                  else
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            controller.removeProductFromCart(product);
+                          },
+                          icon: const Icon(Icons.remove),
+                        ),
+
+                        Text(quantity.toString(), style: AppTextStyle.tittle),
+
+                        IconButton(
+                          onPressed: () {
+                            controller.addProductToCart(product);
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                        // AppElevatedButton(
+                        //   label: 'Adicionar ao Carrinho',
+                        //   type: ButtonType.filled,
+                        //   isLoading: controller.isLoading,
+                        //   onPressed: controller.isLoading
+                        //       ? null
+                        //       : () async {
+                        //           await controller.addProductToCart(product);
+
+                        //           if (context.mounted) {
+                        //             Navigator.of(context).pop();
+                        //           }
+                        //         },
+                        // ),
+                      ],
+                    ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

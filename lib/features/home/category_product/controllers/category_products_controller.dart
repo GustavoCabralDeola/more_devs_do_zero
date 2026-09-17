@@ -9,6 +9,16 @@ class CategoryProductsController extends HomeController {
   String category = '';
   String currentSearchTerm = '';
 
+  bool isLoading = false;
+
+  // Future<void> handleAddToCart(Product product) async {
+  //   changeIsLoadingCategoryProduct(true);
+  //   await loadingButton();
+
+  //   addProductToCart(product);
+  //   changeIsLoadingCategoryProduct(false);
+  // }
+
   Future<void> getProductsByCategory(String category) async {
     this.category = category;
 
@@ -26,6 +36,11 @@ class CategoryProductsController extends HomeController {
     } catch (e) {
       changeProductsState(ProductsViewState.error);
     }
+  }
+
+  void changeIsLoadingCategoryProduct(bool value) {
+    isLoading = value;
+    notifyListeners();
   }
 
   Future<void> getProductsBySearch(String searchTerm) async {
@@ -78,6 +93,11 @@ class CategoryProductsController extends HomeController {
     } else {
       await getProductsBySearch(name);
     }
+  }
+
+  Future<void> loadingButton() async {
+    //Simula o delay de uma chamada de API
+    await Future.delayed(Duration(seconds: 1));
   }
 
   void changeActiveCheckBox(bool value) {

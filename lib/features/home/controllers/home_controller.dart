@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/features/home/category_product/controllers/category_products_controller.dart';
 import 'package:more_devs_do_zero/models/category.dart';
 import 'package:more_devs_do_zero/models/product.dart';
+import 'package:more_devs_do_zero/models/product_cart.dart';
 import 'package:more_devs_do_zero/shared/mocks.dart';
 
 enum CategoriesViewState { loading, sucess, error }
@@ -8,8 +10,12 @@ enum CategoriesViewState { loading, sucess, error }
 enum ProductsViewState { loading, sucess, error }
 
 class HomeController extends ChangeNotifier {
+  //int quantityProductsInCart = 0;
   List<Category> listCategories = [];
   List<Product> listProducts = [];
+  List<ProductCart> listProductsInCart = [];
+
+  //TODO addProductCart
 
   Mocks mockJson = Mocks();
 
@@ -60,4 +66,11 @@ class HomeController extends ChangeNotifier {
       print(productsViewState);
     }
   }
+
+  // void addProductToCart(Product product) {
+  //   quantityProductsInCart++;
+  //   print('Produto adicionado ao carrinho: ${product.name}');
+  //   print('Quantidade no carrinho: $quantityProductsInCart');
+  //   notifyListeners();
+  // }
 }

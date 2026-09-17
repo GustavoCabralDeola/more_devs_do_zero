@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:more_devs_do_zero/features/home/category_product/pages/categoryProducts_page.dart';
+import 'package:more_devs_do_zero/features/home/category_product/pages/category_products_page.dart';
 import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
 import 'package:more_devs_do_zero/models/category.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_loading_animation.dart';

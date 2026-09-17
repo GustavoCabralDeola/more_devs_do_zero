@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/shared/app_colors.dart';
 
 class AppBottomSheet extends StatelessWidget {
   const AppBottomSheet({super.key, required this.child});
@@ -21,7 +22,7 @@ class AppBottomSheet extends StatelessWidget {
               width: 50,
               height: 5,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: AppColors.black,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
