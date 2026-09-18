@@ -6,6 +6,7 @@ import 'package:more_devs_do_zero/models/product.dart';
 import 'package:more_devs_do_zero/shared/app_colors.dart';
 import 'package:more_devs_do_zero/shared/app_text_style.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_bottom_sheet.dart';
+import 'package:more_devs_do_zero/shared/widgets/app_dialog.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_elevated_button.dart';
 import 'package:more_devs_do_zero/shared/widgets/app_loading_animation.dart';
 import 'package:provider/provider.dart';
@@ -120,8 +121,54 @@ class ProductsSection extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          onPressed: () {
-                            controller.removeProductFromCart(product);
+                          onPressed: () async {
+                            if (quantity == 1) {
+                              final shouldRemove = await AppDialog.show<bool>(
+                                context: context,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      'Remover produto?',
+                                      style: AppTextStyle.tittle,
+                                    ),
+                                    Text(
+                                      'Deseja remover ${product.name} do carrinho?',
+                                    ),
+                                    SizedBox(height: 13),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: AppElevatedButton(
+                                            label: 'Cancelar',
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            type: ButtonType.outlined,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: AppElevatedButton(
+                                            label: 'Remover',
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            type: ButtonType.filled,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              if (shouldRemove == true) {
+                                controller.removeProductFromCart(product);
+                              }
+                            } else {
+                              controller.removeProductFromCart(product);
+                            }
                           },
                           icon: const Icon(Icons.remove),
                         ),
@@ -134,20 +181,6 @@ class ProductsSection extends StatelessWidget {
                           },
                           icon: const Icon(Icons.add),
                         ),
-                        // AppElevatedButton(
-                        //   label: 'Adicionar ao Carrinho',
-                        //   type: ButtonType.filled,
-                        //   isLoading: controller.isLoading,
-                        //   onPressed: controller.isLoading
-                        //       ? null
-                        //       : () async {
-                        //           await controller.addProductToCart(product);
-
-                        //           if (context.mounted) {
-                        //             Navigator.of(context).pop();
-                        //           }
-                        //         },
-                        // ),
                       ],
                     ),
                 ],

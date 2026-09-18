@@ -14,9 +14,21 @@ class AppTextStyle {
     fontWeight: FontWeight.bold,
   );
 
+  static const TextStyle brand = TextStyle(
+    color: AppColors.grey300,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
   static const TextStyle price = TextStyle(
     color: AppColors.green,
     fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle totalPrice = TextStyle(
+    color: AppColors.green,
+    fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
