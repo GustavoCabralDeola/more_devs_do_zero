@@ -120,66 +120,88 @@ class ProductsSection extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: () async {
-                            if (quantity == 1) {
-                              final shouldRemove = await AppDialog.show<bool>(
-                                context: context,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Remover produto?',
-                                      style: AppTextStyle.tittle,
-                                    ),
-                                    Text(
-                                      'Deseja remover ${product.name} do carrinho?',
-                                    ),
-                                    SizedBox(height: 13),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: AppElevatedButton(
-                                            label: 'Cancelar',
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                            type: ButtonType.outlined,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: AppElevatedButton(
-                                            label: 'Remover',
-                                            onPressed: () {
-                                              Navigator.of(context).pop(true);
-                                            },
-                                            type: ButtonType.filled,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
+                        SizedBox(
+                          width: 52,
+                          child: AppElevatedButton(
+                            label: '-',
+                            type: ButtonType.filled,
+                            onPressed: () async {
+                              if (quantity == 1) {
+                                final shouldRemove = await AppDialog.show<bool>(
+                                  context: context,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Remover produto?',
+                                        style: AppTextStyle.tittle,
+                                      ),
 
-                              if (shouldRemove == true) {
+                                      Text(
+                                        'Deseja remover ${product.name} do carrinho?',
+                                      ),
+
+                                      const SizedBox(height: 13),
+
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppElevatedButton(
+                                              label: 'Cancelar',
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  context,
+                                                ).pop(false);
+                                              },
+                                              type: ButtonType.outlined,
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 8),
+
+                                          Expanded(
+                                            child: AppElevatedButton(
+                                              label: 'Remover',
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              type: ButtonType.filled,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (shouldRemove == true) {
+                                  controller.removeProductFromCart(product);
+                                }
+                              } else {
                                 controller.removeProductFromCart(product);
                               }
-                            } else {
-                              controller.removeProductFromCart(product);
-                            }
-                          },
-                          icon: const Icon(Icons.remove),
+                            },
+                          ),
                         ),
 
-                        Text(quantity.toString(), style: AppTextStyle.tittle),
+                        SizedBox(
+                          width: 50,
+                          child: Text(
+                            quantity.toString(),
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.tittle,
+                          ),
+                        ),
 
-                        IconButton(
-                          onPressed: () {
-                            controller.addProductToCart(product);
-                          },
-                          icon: const Icon(Icons.add),
+                        SizedBox(
+                          width: 52,
+                          child: AppElevatedButton(
+                            label: '+',
+                            type: ButtonType.filled,
+                            onPressed: () {
+                              controller.addProductToCart(product);
+                            },
+                          ),
                         ),
                       ],
                     ),
